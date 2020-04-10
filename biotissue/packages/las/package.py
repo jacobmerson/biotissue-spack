@@ -30,10 +30,12 @@ class Las(CMakePackage):
 
     homepage = "https://github.com/wrtobin/las"
     url      = "https://github.com/wrtobin/las/archive/v0.1.tar.gz"
+    git      = "https://github.com/wrtobin/las.git"
 
     maintainers = ['jacobmerson']
 
-    version('0.1', sha256='17333998c2ebb9004f10ff37a82ce8ec3d229f2fc2bb32f9e820f6c217aa9bc7')
+    version('develop', branch='dev')
+    #version('0.1', sha256='17333998c2ebb9004f10ff37a82ce8ec3d229f2fc2bb32f9e820f6c217aa9bc7')
 
     variant('mpi', default=True, description='build with MPI')
     variant('petsc', default=False, description='build the petsc backend')
@@ -44,6 +46,7 @@ class Las(CMakePackage):
     depends_on('pumi', when='+pumi')
     depends_on('petsc+mpi', when='+petsc')
     depends_on('mpi', when='+petsc')
+    depends_on('pkg-config', when='+petsc')
     depends_on('mpi', when='+mpi')
 
     def cmake_args(self):
