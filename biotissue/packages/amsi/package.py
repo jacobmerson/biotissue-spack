@@ -30,7 +30,7 @@ class Amsi(CMakePackage):
     depends_on('zoltan', when='+zoltan')
     depends_on('pumi+zoltan', when='+zoltan')
     # this is used to find petsc
-    depends_on('pkg-config')
+    depends_on('pkg-config',type='build')
 
     def cmake_args(self):
         args = []

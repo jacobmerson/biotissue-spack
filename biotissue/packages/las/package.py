@@ -3,23 +3,6 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-# ----------------------------------------------------------------------------
-# If you submit this package back to Spack as a pull request,
-# please first remove this boilerplate and all FIXME comments.
-#
-# This is a template package file for Spack.  We've put "FIXME"
-# next to all the things you'll want to change. Once you've handled
-# them, you can save this file and test your package like this:
-#
-#     spack install las
-#
-# You can edit this file again by typing:
-#
-#     spack edit las
-#
-# See the Spack documentation for more information on packaging.
-# ----------------------------------------------------------------------------
-
 from spack import *
 
 
@@ -46,7 +29,7 @@ class Las(CMakePackage):
     depends_on('pumi', when='+pumi')
     depends_on('petsc+mpi', when='+petsc')
     depends_on('mpi', when='+petsc')
-    depends_on('pkg-config', when='+petsc')
+    depends_on('pkg-config', when='+petsc', type='build')
     depends_on('mpi', when='+mpi')
 
     def cmake_args(self):
