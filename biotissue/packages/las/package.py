@@ -31,6 +31,8 @@ class Las(CMakePackage):
     depends_on('mpi', when='+petsc')
     depends_on('pkg-config', when='+petsc', type='build')
     depends_on('mpi', when='+mpi')
+    depends_on('catch2@2.11.3:', type='build', when='+tests')
+    conflicts("~mpi", when="+petsc")
 
     def cmake_args(self):
         args = []

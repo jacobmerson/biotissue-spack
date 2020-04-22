@@ -30,11 +30,14 @@ class Biotissue(CMakePackage):
     depends_on('mpi')
     depends_on('amsi')
     depends_on('las+pumi+petsc+sparskit')
-    depends_on('pumi simmodsuite=full')
+    #depends_on('pumi simmodsuite=full')
+    depends_on('pumi')
+    conflicts('pumi simmodsuite=none')
     depends_on('yaml-cpp@0.3.0')
     depends_on('pkg-config', type='build')
     depends_on('kokkos+cuda+wrapper+cuda_lambda', when='+kokkos')
     #depends_on('cuda', when='+kokkos')
+    depends_on('catch2@2.11.3:', type='build', when='+tests')
 
     def cmake_args(self):
         args = []
