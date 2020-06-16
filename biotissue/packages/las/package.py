@@ -33,6 +33,8 @@ class Las(CMakePackage):
     depends_on('mpi', when='+mpi')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
     conflicts("~mpi", when="+petsc")
+    depends_on('ninja', type='build')
+    generator = 'Ninja'
 
     def cmake_args(self):
         args = []
@@ -46,6 +48,7 @@ class Las(CMakePackage):
                          "-DCMAKE_C_COMPILER=%s"%spack_cc,
                          "-DCMAKE_Fortran_COMPILER=%s"%spack_f77,
                          "-DWITH_MPI=OFF"])
+        args.append("-DCMAKE_EXPORT_COMPILE_COMMANDS=true")
         # we don't deal with building with kokkos since this backend
         # hasn't been written/tested
         args.append("-DWITH_KOKKOS=OFF")

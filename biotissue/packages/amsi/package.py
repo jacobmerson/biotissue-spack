@@ -32,6 +32,8 @@ class Amsi(CMakePackage):
     # this is used to find petsc
     depends_on('pkg-config',type='build')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
+    depends_on('ninja', type='build')
+    generator = 'Ninja'
 
     def cmake_args(self):
         args = []
@@ -40,6 +42,7 @@ class Amsi(CMakePackage):
                      "-DCMAKE_Fortran_COMPILER=%s"%self.spec['mpi'].mpif77])
 
         args.append("-DENABLE_VERBOSITY=%s"%self.spec.variants['verbosity'].value)
+        args.append("-DCMAKE_EXPORT_COMPILE_COMMANDS=true")
         if '+zoltan' in self.spec:
             args.append("-DENABLE_ZOLTAN=ON")
         else:
