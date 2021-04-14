@@ -11,12 +11,12 @@ class Amsi(CMakePackage):
        as a basic framework for doing massively parallel multiscale analysis"""
 
     homepage = "https://github.com/wrtobin/amsi"
-    #git      = "https://github.com/wrtobin/amsi.git"
-    git      = "git@github.com:wrtobin/amsi.git"
+    git      = "git@github.com:jacobmerson/amsi.git"
 
     maintainers = ['jacobmerson']
 
     version('develop', branch='develop')
+    version('remove-simmetrix', branch='remove-simmetrix')
 
 
     variant('verbosity', default='LOW', description='set the verbosity of the output',
@@ -26,31 +26,24 @@ class Amsi(CMakePackage):
 
     depends_on('mpi')
     depends_on('petsc+mpi')
-    depends_on('pumi simmodsuite=full')
     depends_on('zoltan', when='+zoltan')
+    depends_on('pumi')
+    depends_on('pumi simmodsuite=full',when="@develop")
     depends_on('pumi+zoltan', when='+zoltan')
+    depends_on('model-traits', when='@remove-simmetrix')
     # this is used to find petsc
     depends_on('pkg-config',type='build')
-    depends_on('catch2@2.11.3:', type='build', when='+tests')
-    depends_on('ninja', type='build')
-    generator = 'Ninja'
+    #depends_on('catch2@2.11.3:', type='build', when='+tests')
 
     def cmake_args(self):
-        args = []
-        args.extend(["-DCMAKE_CXX_COMPILER=%s"%self.spec['mpi'].mpicxx,
-                     "-DCMAKE_C_COMPILER=%s"%self.spec['mpi'].mpicc,
-                     "-DCMAKE_Fortran_COMPILER=%s"%self.spec['mpi'].mpif77])
-
-        args.append("-DENABLE_VERBOSITY=%s"%self.spec.variants['verbosity'].value)
-        args.append("-DCMAKE_EXPORT_COMPILE_COMMANDS=true")
-        if '+zoltan' in self.spec:
-            args.append("-DENABLE_ZOLTAN=ON")
-        else:
-            args.append("-DENABLE_ZOLTAN=OFF")
-
-        args.extend(['-DPETSC_DIR=%s'%self.spec['petsc'].prefix])
-        if '+tests' in self.spec:
-            args.append("-DBUILD_TESTS=ON")
-        else:
-            args.append("-DBUILD_TESTS=OFF")
+        args = [
+                 self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
+                 self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
+                 self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77),
+                 self.define("BUILD_EXTERNAL", False),
+                 self.define_from_variant('ENABLE_VERBOSITY','verbosity'),
+                 self.define_from_variant('ENABLE_ZOLTAN','zoltan'),
+                 self.define_from_variant('BUILD_TESTS','tests'),
+                 self.define('PETSC_DIR',self.spec['petsc'].prefix),
+                ]
         return args

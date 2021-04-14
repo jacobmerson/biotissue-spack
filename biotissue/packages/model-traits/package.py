@@ -11,10 +11,12 @@ class ModelTraits(CMakePackage):
 
     homepage = "https://github.com/jacobmerson/model-traits/"
     url      = "https://github.com/jacobmerson/model-traits/archive/refs/tags/v0.1.0.tar.gz"
+    git      = "https://github.com/jacobmerson/model-traits.git"
 
     maintainers = ['jacobmerson']
 
     version('0.1.0', sha256='ff7c1c5be6977f1d3dc592e8b6c5bff5a8b7ea80d0f059d85c02300bdb8faf2c')
+    version('main', branch='main')
 
 
 
@@ -29,11 +31,21 @@ class ModelTraits(CMakePackage):
     depends_on('simmetrix-simmodsuite', when='+simmetrix')
     depends_on('fmt@7.1.3')
     depends_on('cmake@3.14.0:',type='build')
+    depends_on('mpi', when='+simmetrix')
+    depends_on('mpi', when='+pumi')
 
     def cmake_args(self):
         args = [self.define('BUILD_EXTERNAL',False),
                 self.define_from_variant('ENABLE_SCOREC','pumi'),
                 self.define_from_variant('ENABLE_SIMMETRIX','simmetrix'),
                 self.define_from_variant('ENABLE_YAML','yaml'),
-                self.define_from_variant('BUILD_TESTING','tests')]
+                self.define_from_variant('BUILD_TESTING','tests'),
+                self.define('SKIP_SIMMETRIX_VERSION_CHECK', True)]
+        if "+simmetrix" in self.spec:
+            args.append(self.define('SIM_MPI', self.spec['mpi'].name + self.spec['mpi'].version.string))
+        if '+pumi' in self.spec or "+simmetrix" in self.spec:
+          args.extend([
+            self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
+            self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
+            self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77),])
         return args

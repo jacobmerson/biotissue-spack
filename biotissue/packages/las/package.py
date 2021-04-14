@@ -33,41 +33,22 @@ class Las(CMakePackage):
     depends_on('mpi', when='+mpi')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
     conflicts("~mpi", when="+petsc")
-    depends_on('ninja', type='build')
-    generator = 'Ninja'
+    #depends_on('ninja', type='build')
+    #generator = 'Ninja'
 
     def cmake_args(self):
-        args = []
+        args = [
+                self.define_from_variant("WITH_MPI", "mpi"),
+                self.define("WITH_KOKKOS", False),
+                self.define_from_variant("WITH_PETSC","petsc"),
+                self.define_from_variant("WITH_PUMI","pumi"),
+                self.define_from_variant("WITH_SPARSKIT","sparskit"),
+                self.define_from_variant("BUILD_TESTS","tests"),
+                ]
         if "+mpi" in self.spec:
-            args.extend(["-DCMAKE_CXX_COMPILER=%s"%self.spec['mpi'].mpicxx,
-                         "-DCMAKE_C_COMPILER=%s"%self.spec['mpi'].mpicc,
-                         "-DCMAKE_Fortran_COMPILER=%s"%self.spec['mpi'].mpif77,
-                         "-DWITH_MPI=ON"])
-        else:
-            args.extend(["-DCMAKE_CXX_COMPILER=%s"%spack_cxx,
-                         "-DCMAKE_C_COMPILER=%s"%spack_cc,
-                         "-DCMAKE_Fortran_COMPILER=%s"%spack_f77,
-                         "-DWITH_MPI=OFF"])
-        args.append("-DCMAKE_EXPORT_COMPILE_COMMANDS=true")
-        # we don't deal with building with kokkos since this backend
-        # hasn't been written/tested
-        args.append("-DWITH_KOKKOS=OFF")
-        if '+petsc' in self.spec:
-            args.extend(['-DWITH_PETSC=ON',
-                         '-DPETSC_DIR=%s'%self.spec['petsc'].prefix])
-        else:
-            args.append('-DWITH_PETSC=OFF')
-        if '+pumi' in self.spec:
-            args.append('-DWITH_PUMI=ON')
-        else:
-            args.append('-DWITH_PUMI=OFF')
-
-        if '+sparskit' in self.spec:
-            args.append("-DBUILD_SPARSKIT=ON")
-        else:
-            args.append("-DBUILD_SPARSKIT=OFF")
-        if '+tests' in self.spec:
-            args.append("-DBUILD_TESTS=ON")
-        else:
-            args.append("-DBUILD_TESTS=OFF")
+            args.extend([self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
+                         self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
+                         self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77)])
+        if "+petsc" in self.spec:
+            args.append(self.define("PETSC_DIR",self.spec['petsc'].prefix))
         return args
