@@ -33,6 +33,7 @@ class ModelTraits(CMakePackage):
     depends_on('cmake@3.14.0:',type='build')
     depends_on('mpi', when='+simmetrix')
     depends_on('mpi', when='+pumi')
+    depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
         args = [self.define('BUILD_EXTERNAL',False),

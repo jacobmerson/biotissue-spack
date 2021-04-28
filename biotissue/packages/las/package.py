@@ -32,6 +32,7 @@ class Las(CMakePackage):
     depends_on('pkg-config', when='+petsc', type='build')
     depends_on('mpi', when='+mpi')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
+    depends_on('cmake@3.14:',type='build')
     conflicts("~mpi", when="+petsc")
     #depends_on('ninja', type='build')
     #generator = 'Ninja'

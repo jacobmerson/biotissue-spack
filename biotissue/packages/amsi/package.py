@@ -11,7 +11,7 @@ class Amsi(CMakePackage):
        as a basic framework for doing massively parallel multiscale analysis"""
 
     homepage = "https://github.com/wrtobin/amsi"
-    git      = "git@github.com:jacobmerson/amsi.git"
+    git      = "https://github.com/jacobmerson/amsi.git"
 
     maintainers = ['jacobmerson']
 
@@ -34,6 +34,7 @@ class Amsi(CMakePackage):
     # this is used to find petsc
     depends_on('pkg-config',type='build')
     #depends_on('catch2@2.11.3:', type='build', when='+tests')
+    depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
         args = [

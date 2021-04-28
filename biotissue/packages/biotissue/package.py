@@ -11,8 +11,7 @@ class Biotissue(CMakePackage):
        as a basic framework for doing massively parallel multiscale analysis"""
 
     homepage = "https://github.com/wrtobin/biotissue"
-    #git      = "https://github.com/wrtobin/biotissue.git"
-    git      = "git@github.com:jacobmerson/biotissue.git"
+    git      = "https://github.com/jacobmerson/biotissue.git"
 
     maintainers = ['jacobmerson']
 
@@ -45,6 +44,7 @@ class Biotissue(CMakePackage):
     depends_on('catch2@2.11.3:', type='build', when='+tests')
 
     depends_on('model-traits', when='@remove-simmetrix')
+    depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
         args = [
