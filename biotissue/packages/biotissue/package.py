@@ -43,10 +43,15 @@ class Biotissue(CMakePackage):
     #depends_on('catch2@2.11.3:', type='build', when='@develop,reduce-registers +tests')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
 
-    depends_on('model-traits', when='@remove-simmetrix')
+    depends_on('model-traits@0.1.1:', when='@remove-simmetrix')
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
+        try:
+            self.compiler.cxx14_flag
+        except UnsupportedCompilerFlag:
+            InstallError('biotissue requires a C++14-compliant C++ compiler')
+
         args = [
                  self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
                  self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
@@ -54,8 +59,6 @@ class Biotissue(CMakePackage):
                  self.define_from_variant("ENABLE_VERBOSITY",'verbosity'),
                  self.define_from_variant("MICRO_BACKEND",'micro_backend'),
                  self.define("CMAKE_CXX_STANDARD",11),
-                 self.define("las_DIR",self.spec['las'].prefix.lib.cmake),
-                 self.define("las_core_DIR",self.spec['las'].prefix.lib.cmake),
                  self.define_from_variant("ENABLE_KOKKOS", "kokkos"),
                  self.define_from_variant("LOGRUN", "logrun"),
                  self.define_from_variant("BUILD_TESTS", "tests"),

@@ -30,13 +30,18 @@ class Amsi(CMakePackage):
     depends_on('pumi')
     depends_on('pumi simmodsuite=full',when="@develop")
     depends_on('pumi+zoltan', when='+zoltan')
-    depends_on('model-traits', when='@remove-simmetrix')
+    depends_on('model-traits@0.1.1:', when='@remove-simmetrix')
     # this is used to find petsc
     depends_on('pkg-config',type='build')
     #depends_on('catch2@2.11.3:', type='build', when='+tests')
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
+        try:
+            self.compiler.cxx14_flag
+        except UnsupportedCompilerFlag:
+            InstallError('amsi requires a C++14-compliant C++ compiler')
+
         args = [
                  self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
                  self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),

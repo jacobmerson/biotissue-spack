@@ -15,6 +15,7 @@ class ModelTraits(CMakePackage):
 
     maintainers = ['jacobmerson']
 
+    version('0.1.1', sha256='75af53b4f576071570fdcfa7a4ce150b935cf21368da41d16d8377c5b3b93713')
     version('0.1.0', sha256='ff7c1c5be6977f1d3dc592e8b6c5bff5a8b7ea80d0f059d85c02300bdb8faf2c')
     version('main', branch='main')
 
@@ -36,6 +37,11 @@ class ModelTraits(CMakePackage):
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
+        try:
+            self.compiler.cxx14_flag
+        except UnsupportedCompilerFlag:
+            InstallError('model-traits requires a C++14-compliant C++ compiler')
+
         args = [self.define('BUILD_EXTERNAL',False),
                 self.define_from_variant('ENABLE_SCOREC','pumi'),
                 self.define_from_variant('ENABLE_SIMMETRIX','simmetrix'),
