@@ -20,14 +20,12 @@ class ModelTraits(CMakePackage):
     version('main', branch='main')
 
 
-
-    variant('tests', default=False, description='builds the tests')
     variant('yaml', default=True, description='build the Yaml IO backend')
     variant('simmetrix', default=False, description='build the Simmetrix backend')
     variant('pumi', default=False, description='build the pumi examples')
 
     depends_on('yaml-cpp@0.6.3:',when='+yaml')
-    depends_on('catch2@3.0.0-preview3:', when='+tests')
+    depends_on('catch2@3.0.0-preview3:', type='test')
     depends_on('pumi', when='+pumi')
     depends_on('simmetrix-simmodsuite', when='+simmetrix')
     depends_on('fmt@7.1.3')
@@ -41,15 +39,20 @@ class ModelTraits(CMakePackage):
             self.compiler.cxx14_flag
         except UnsupportedCompilerFlag:
             InstallError('model-traits requires a C++14-compliant C++ compiler')
-
-        args = [self.define('BUILD_EXTERNAL',False),
-                self.define_from_variant('ENABLE_SCOREC','pumi'),
-                self.define_from_variant('ENABLE_SIMMETRIX','simmetrix'),
-                self.define_from_variant('ENABLE_YAML','yaml'),
-                self.define_from_variant('BUILD_TESTING','tests'),
-                self.define('SKIP_SIMMETRIX_VERSION_CHECK', True)]
+        args = [self.define('BUILD_TESTING', self.run_tests)]
+        if self.spec.satisfies('@:0.1.1'):
+            args.extend([self.define('BUILD_EXTERNAL',False),
+                    self.define_from_variant('ENABLE_SCOREC','pumi'),
+                    self.define_from_variant('ENABLE_SIMMETRIX','simmetrix'),
+                    self.define_from_variant('ENABLE_YAML','yaml')])
+        else:
+            args.extend([self.define('MODEL_TRAITS_BUILD_EXTERNAL',False),
+                    self.define_from_variant('MODEL_TRAITS_ENABLE_SCOREC','pumi'),
+                    self.define_from_variant('MODEL_TRAITS_ENABLE_SIMMETRIX','simmetrix'),
+                    self.define_from_variant('MODEL_TRAITS_ENABLE_YAML','yaml')])
         if "+simmetrix" in self.spec:
             args.append(self.define('SIM_MPI', self.spec['mpi'].name + self.spec['mpi'].version.string))
+            args.append(self.define('SKIP_SIMMETRIX_VERSION_CHECK', True))
         if '+pumi' in self.spec or "+simmetrix" in self.spec:
           args.extend([
             self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
