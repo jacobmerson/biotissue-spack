@@ -6,18 +6,17 @@
 from spack import *
 
 
-class Biotissue(CMakePackage):
-    """AMSI the Adaptive Multiscale Simulation Infrastructure is used
-       as a basic framework for doing massively parallel multiscale analysis"""
+class Mumfim(CMakePackage):
+    """Multiscale Modeling of Fibrous Materials"""
 
-    homepage = "https://github.com/wrtobin/biotissue"
-    git      = "https://github.com/jacobmerson/biotissue.git"
+    homepage = "https://github.com/SCOREC/mumfim"
+    git      = "https://github.com/SCOREC/mumfim.git"
+    url      = "https://github.com/SCOREC/mumfim/archive/refs/tags/v0.4.0.tar.gz"
 
     maintainers = ['jacobmerson']
 
     version('develop', branch='develop')
-    version('reduce-registers', branch='reduce-registers')
-    version('remove-simmetrix', branch='remove-simmetrix')
+    version('0.4.0', sha256='f36074ebdf23c58a552ac4ccfdfa2a38ea17e2d11f5e0b41af50791acf4b8572')
 
 
     variant('tests', default=False, description='builds the tests')
@@ -31,19 +30,16 @@ class Biotissue(CMakePackage):
     depends_on('mpi')
     depends_on('las+pumi+petsc+sparskit')
 
-    depends_on('amsi@develop', when='@develop,reduce-registers')
-    depends_on('amsi@remove-simmetrix', when='@remove-simmetrix')
-    depends_on('pumi simmodsuite=full',when='@develop,reduce-registers')
-    depends_on('pumi',when='@remove-simmetrix')
+    depends_on('amsi@0.2.0:')
+    depends_on('pumi')
 
-    depends_on('yaml-cpp@0.3.0',when='@develop,reduce-registers')
+    depends_on('yaml-cpp@0.3.0')
     depends_on('pkg-config', type='build')
     depends_on('kokkos')
 
-    #depends_on('catch2@2.11.3:', type='build', when='@develop,reduce-registers +tests')
     depends_on('catch2@2.11.3:', type='build', when='+tests')
 
-    depends_on('model-traits@0.1.1:', when='@remove-simmetrix')
+    depends_on('model-traits@0.1.1:')
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):

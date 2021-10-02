@@ -10,13 +10,14 @@ class Amsi(CMakePackage):
     """AMSI the Adaptive Multiscale Simulation Infrastructure is used
        as a basic framework for doing massively parallel multiscale analysis"""
 
-    homepage = "https://github.com/wrtobin/amsi"
-    git      = "https://github.com/jacobmerson/amsi.git"
+    homepage = "https://github.com/SCOREC/amsi"
+    git      = "https://github.com/SCOREC/amsi.git"
+    url      = "https://github.com/SCOREC/amsi/archive/refs/tags/v0.2.0.tar.gz"
 
     maintainers = ['jacobmerson']
 
     version('develop', branch='develop')
-    version('remove-simmetrix', branch='remove-simmetrix')
+    version('0.2.0', sha256='5fdebdf230b5c8455b689d4fa2c242689e170f2296fc1c340518ffd3592d58f0')
 
 
     variant('verbosity', default='LOW', description='set the verbosity of the output',
@@ -28,9 +29,8 @@ class Amsi(CMakePackage):
     depends_on('petsc+mpi')
     depends_on('zoltan', when='+zoltan')
     depends_on('pumi')
-    depends_on('pumi simmodsuite=full',when="@develop")
     depends_on('pumi+zoltan', when='+zoltan')
-    depends_on('model-traits@0.1.1:', when='@remove-simmetrix')
+    depends_on('model-traits@0.1.1:')
     # this is used to find petsc
     depends_on('pkg-config',type='build')
     #depends_on('catch2@2.11.3:', type='build', when='+tests')
