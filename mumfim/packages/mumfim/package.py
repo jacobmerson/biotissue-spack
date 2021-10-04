@@ -33,7 +33,7 @@ class Mumfim(CMakePackage):
     depends_on('amsi@0.2.0:')
     depends_on('pumi')
 
-    depends_on('yaml-cpp@0.3.0')
+    depends_on('yaml-cpp@0.6.3:')
     depends_on('pkg-config', type='build')
     depends_on('kokkos')
 
