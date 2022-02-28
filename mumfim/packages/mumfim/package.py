@@ -28,7 +28,7 @@ class Mumfim(CMakePackage):
             values=('sparskit','petsc'), multi=False)
 
     depends_on('mpi')
-    depends_on('las+pumi+petsc+sparskit')
+    depends_on('las@0.1.2:+pumi+petsc+sparskit')
 
     depends_on('amsi@0.2.0:')
     depends_on('pumi')

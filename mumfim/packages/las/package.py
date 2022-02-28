@@ -18,7 +18,8 @@ class Las(CMakePackage):
     maintainers = ['jacobmerson']
 
     version('develop', branch='dev')
-    #version('0.1', sha256='17333998c2ebb9004f10ff37a82ce8ec3d229f2fc2bb32f9e820f6c217aa9bc7')
+    version('0.1', sha256='17333998c2ebb9004f10ff37a82ce8ec3d229f2fc2bb32f9e820f6c217aa9bc7')
+    version('0.1.2', sha256='18f30cde4e069d5f8979a55b09f247a0dd2a90004047c6f531723702a2c3c22b')
 
     variant('mpi', default=True, description='build with MPI')
     variant('petsc', default=False, description='build the petsc backend')
