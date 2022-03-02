@@ -32,7 +32,7 @@ spack repo add mumfim-spack/mumfim
 
 It is important to modify the various spack config files for your system.
 This tells spack what compilers to use, etc. examples of the setup for the
-scorec systems will be included in the `biotissue-spack` repository.
+scorec systems will be included in the `mumfim-spack` repository.
 
 It is common practice/reccomended to use system packages for `cmake`, compilers, `python`, `cuda`,
 however spack responds much better if it builds most of the libraries which need linking
@@ -41,7 +41,7 @@ against itself, so don't go too overboard with using system packages.
 ## Installing
 
 ```bash
-spack install biotissue
+spack install mumfim
 ```
 
 ## Setting up spack to build dependencies
