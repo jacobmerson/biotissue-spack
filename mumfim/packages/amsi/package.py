@@ -31,25 +31,18 @@ class Amsi(CMakePackage):
     depends_on('pumi')
     depends_on('pumi+zoltan', when='+zoltan')
     depends_on('model-traits@0.1.1:')
+    depends_on('model-traits@main',when='@develop')
     # this is used to find petsc
     depends_on('pkg-config',type='build')
     #depends_on('catch2@2.11.3:', type='build', when='+tests')
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
-        try:
-            self.compiler.cxx14_flag
-        except UnsupportedCompilerFlag:
-            InstallError('amsi requires a C++14-compliant C++ compiler')
-
-        args = [
-                 self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
-                 self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
-                 self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77),
-                 self.define("BUILD_EXTERNAL", False),
-                 self.define_from_variant('ENABLE_VERBOSITY','verbosity'),
-                 self.define_from_variant('ENABLE_ZOLTAN','zoltan'),
-                 self.define_from_variant('BUILD_TESTS','tests'),
-                 self.define('PETSC_DIR',self.spec['petsc'].prefix),
+        args = [self.define("MPI_HOME",self.spec['mpi'].prefix),
+                self.define("BUILD_EXTERNAL", False),
+                self.define_from_variant('ENABLE_VERBOSITY','verbosity'),
+                self.define_from_variant('ENABLE_ZOLTAN','zoltan'),
+                self.define_from_variant('BUILD_TESTS','tests'),
+                self.define('PETSC_DIR',self.spec['petsc'].prefix),
                 ]
         return args

@@ -29,8 +29,10 @@ class Mumfim(CMakePackage):
 
     depends_on('mpi')
     depends_on('las@0.1.2:+pumi+petsc+sparskit')
+    depends_on('las@develop+pumi+petsc+sparskit', when='@develop')
 
     depends_on('amsi@0.2.0:')
+    depends_on('amsi@develop', when='@develop')
     depends_on('pumi')
 
     depends_on('yaml-cpp@0.6.3:')
@@ -40,24 +42,17 @@ class Mumfim(CMakePackage):
     depends_on('catch2@2.11.3:', type='build', when='+tests')
 
     depends_on('model-traits@0.1.1:')
+    depends_on('model-traits@main',when='@develop')
     depends_on('cmake@3.14:',type='build')
 
     def cmake_args(self):
-        try:
-            self.compiler.cxx14_flag
-        except UnsupportedCompilerFlag:
-            InstallError('biotissue requires a C++14-compliant C++ compiler')
-
-        args = [
-                 self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
-                 self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
-                 self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77),
-                 self.define_from_variant("ENABLE_VERBOSITY",'verbosity'),
-                 self.define_from_variant("MICRO_BACKEND",'micro_backend'),
-                 self.define("CMAKE_CXX_STANDARD",11),
-                 self.define_from_variant("ENABLE_KOKKOS", "kokkos"),
-                 self.define_from_variant("LOGRUN", "logrun"),
-                 self.define_from_variant("BUILD_TESTS", "tests"),
-                 self.define("BUILD_EXTERNAL", False)
+        args = [self.define("MPI_HOME",self.spec['mpi'].prefix),
+                self.define_from_variant("ENABLE_VERBOSITY",'verbosity'),
+                self.define_from_variant("MICRO_BACKEND",'micro_backend'),
+                self.define("CMAKE_CXX_STANDARD",11),
+                self.define_from_variant("ENABLE_KOKKOS", "kokkos"),
+                self.define_from_variant("LOGRUN", "logrun"),
+                self.define_from_variant("BUILD_TESTS", "tests"),
+                self.define("BUILD_EXTERNAL", False)
                ]
         return args

@@ -48,9 +48,7 @@ class Las(CMakePackage):
                 self.define_from_variant("BUILD_TESTS","tests"),
                 ]
         if "+mpi" in self.spec:
-            args.extend([self.define("CMAKE_CXX_COMPILER",self.spec['mpi'].mpicxx),
-                         self.define("CMAKE_C_COMPILER",self.spec['mpi'].mpicc),
-                         self.define("CMAKE_Fortran_COMPILER",self.spec['mpi'].mpif77)])
+            args.extend([self.define("MPI_HOME",self.spec['mpi'].prefix),])
         if "+petsc" in self.spec:
             args.append(self.define("PETSC_DIR",self.spec['petsc'].prefix))
         return args
