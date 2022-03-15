@@ -39,6 +39,12 @@ class Amsi(CMakePackage):
 
     def cmake_args(self):
         args = [self.define("MPI_HOME",self.spec['mpi'].prefix),
+                self.define("CMAKE_C_COMPILER", self.spec['mpi'].mpicc),
+                self.define("CMAKE_CXX_COMPILER", self.spec['mpi'].mpicxx),
+                self.define("CMAKE_Fortran_COMPILER", self.spec['mpi'].mpifc),
+                #self.define("MPI_C_COMPILER", self.spec['mpi'].mpicc),
+                #self.define("MPI_CXX_COMPILER", self.spec['mpi'].mpicxx),
+                #self.define("MPI_Fortran_COMPILER", self.spec['mpi'].mpifc),
                 self.define("BUILD_EXTERNAL", False),
                 self.define_from_variant('ENABLE_VERBOSITY','verbosity'),
                 self.define_from_variant('ENABLE_ZOLTAN','zoltan'),
