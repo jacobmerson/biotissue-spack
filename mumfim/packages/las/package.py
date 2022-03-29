@@ -41,6 +41,9 @@ class Las(CMakePackage):
     def cmake_args(self):
         args = [
                 self.define_from_variant("WITH_MPI", "mpi"),
+                self.define("CMAKE_C_COMPILER", self.spec['mpi'].mpicc),
+                self.define("CMAKE_CXX_COMPILER", self.spec['mpi'].mpicxx),
+                self.define("CMAKE_Fortran_COMPILER", self.spec['mpi'].mpifc),
                 self.define("WITH_KOKKOS", False),
                 self.define_from_variant("WITH_PETSC","petsc"),
                 self.define_from_variant("WITH_PUMI","pumi"),
