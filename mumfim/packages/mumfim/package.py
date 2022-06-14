@@ -39,7 +39,7 @@ class Mumfim(CMakePackage):
     depends_on('pkg-config', type='build')
     depends_on('kokkos')
 
-    depends_on('catch2@2.11.3:', type='build', when='+tests')
+    depends_on('catch2@2.11.3:2.99.99', type='build', when='+tests')
 
     depends_on('model-traits@0.1.1:')
     depends_on('model-traits@main',when='@develop')
