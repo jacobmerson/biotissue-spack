@@ -38,6 +38,7 @@ class Mumfim(CMakePackage):
     depends_on('yaml-cpp@0.6.3:')
     depends_on('pkg-config', type='build')
     depends_on('kokkos')
+    depends_on('kokkos-kernels')
 
     depends_on('catch2@2.11.3:', type='build', when='+tests')
 
@@ -55,4 +56,6 @@ class Mumfim(CMakePackage):
                 self.define_from_variant("BUILD_TESTS", "tests"),
                 self.define("BUILD_EXTERNAL", False)
                ]
+        if "dev_path" in self.spec.variants:
+            args.append(self.define("CMAKE_EXPORT_COMPILE_COMMANDS",True))
         return args
