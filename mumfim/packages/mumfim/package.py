@@ -33,7 +33,7 @@ class Mumfim(CMakePackage):
 
     depends_on('amsi@0.2.0:')
     depends_on('amsi@develop', when='@develop')
-    depends_on('pumi')
+    depends_on('pumi@:2.2.7')
 
     depends_on('yaml-cpp@0.6.3:')
     depends_on('pkg-config', type='build')
@@ -45,6 +45,8 @@ class Mumfim(CMakePackage):
     depends_on('model-traits@0.1.1:')
     depends_on('model-traits@main',when='@develop')
     depends_on('cmake@3.14:',type='build')
+
+    keep_werror=False
 
     def cmake_args(self):
         args = [self.define("MPI_HOME",self.spec['mpi'].prefix),
