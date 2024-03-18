@@ -26,6 +26,7 @@ class Mumfim(CMakePackage):
             values=('OFF', 'LOW', 'MED', 'HIGH'), multi=False)
     variant('micro_backend', default='sparskit', description='set the microscale backend',
             values=('sparskit','petsc'), multi=False)
+    variant('adios2', default=False, description='build adios2 test runner')
 
     depends_on('mpi')
     depends_on('las@0.1.2:+pumi+petsc+sparskit')
@@ -46,7 +47,7 @@ class Mumfim(CMakePackage):
     depends_on('model-traits@main',when='@develop')
     depends_on('cmake@3.14:',type='build')
 
-    keep_werror=False
+    depends_on('adios2@2.8.0:',when='+adios2')
 
     def cmake_args(self):
         args = [self.define("MPI_HOME",self.spec['mpi'].prefix),
@@ -56,6 +57,7 @@ class Mumfim(CMakePackage):
                 self.define_from_variant("ENABLE_KOKKOS", "kokkos"),
                 self.define_from_variant("LOGRUN", "logrun"),
                 self.define_from_variant("BUILD_TESTS", "tests"),
+                self.define_from_variant("MUMFIM_ENABLE_ADIOS2", "adios2"),
                 self.define("BUILD_EXTERNAL", False)
                ]
         if "dev_path" in self.spec.variants:
