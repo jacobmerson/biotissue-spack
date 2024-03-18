@@ -39,7 +39,7 @@ class Mumfim(CMakePackage):
     depends_on('yaml-cpp@0.6.3:')
     depends_on('pkg-config', type='build')
     depends_on('kokkos')
-    depends_on('kokkos-kernels')
+    depends_on('kokkos-kernels@4:')
 
     depends_on('catch2@2.11.3:2.99.99', type='build', when='+tests')
 
