@@ -27,6 +27,7 @@ class Mumfim(CMakePackage):
     variant('micro_backend', default='sparskit', description='set the microscale backend',
             values=('sparskit','petsc'), multi=False)
     variant('adios2', default=False, description='build adios2 test runner')
+    variant('pytorch', default=False, description='build with pytorch material model')
 
     depends_on('mpi')
     depends_on('las@0.1.2:+pumi+petsc+sparskit')
@@ -46,6 +47,9 @@ class Mumfim(CMakePackage):
     depends_on('model-traits@0.1.1:')
     depends_on('model-traits@main',when='@develop')
     depends_on('cmake@3.14:',type='build')
+    depends_on('perfstubs')
+    depends_on('py-torch', when='+pytorch')
+
 
     depends_on('adios2@2.8.0:',when='+adios2')
 
@@ -58,6 +62,7 @@ class Mumfim(CMakePackage):
                 self.define_from_variant("LOGRUN", "logrun"),
                 self.define_from_variant("BUILD_TESTS", "tests"),
                 self.define_from_variant("MUMFIM_ENABLE_ADIOS2", "adios2"),
+                self.define_from_variant("MUMFIM_ENABLE_Torch", "pytorch"),
                 self.define("BUILD_EXTERNAL", False)
                ]
         if "dev_path" in self.spec.variants:
