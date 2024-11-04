@@ -1,0 +1,28 @@
+diff --git a/apf/CMakeLists.txt b/apf/CMakeLists.txt
+index fc5aaf34..c27e172e 100644
+--- a/apf/CMakeLists.txt
++++ b/apf/CMakeLists.txt
+@@ -80,6 +80,7 @@ set(HEADERS
+   apfField.h
+   apfFieldData.h
+   apfNumberingClass.h
++  apfElement.h
+ )
+ 
+ # Add the apf library
+diff --git a/apf/apfElement.cc b/apf/apfElement.cc
+index 161de8df..d35bb8f3 100644
+--- a/apf/apfElement.cc
++++ b/apf/apfElement.cc
+@@ -121,9 +121,8 @@ void Element::getNodeData()
+ 
+ void Element::getElementNodeData(NewArray<double>& d)
+ {
+-  d.allocated() ? d.resize(nen) : d.allocate(nen);
+-  for (int i = 0; i < nen; i++)
+-    d[i] = nodeData[i];
++  d.resize(nodeData.size());
++  std::copy(&nodeData[0], (&nodeData[nodeData.size()-1])+1, &d[0]);
+ }
+ 
+ }//namespace apf

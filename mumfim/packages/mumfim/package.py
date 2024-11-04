@@ -35,7 +35,8 @@ class Mumfim(CMakePackage):
 
     depends_on('amsi@0.2.0:')
     depends_on('amsi@develop', when='@develop')
-    depends_on('pumi@:2.2.7')
+    # copy of PUMI library is in mumfim REPO to support this patch see https://github.com/spack/spack/issues/34961
+    depends_on('pumi@2.2.7', patches=patch("pumi-2-7.patch"))
 
     depends_on('yaml-cpp@0.6.3:')
     depends_on('pkg-config', type='build')
